@@ -57,6 +57,16 @@ class Property:
         
         #PRM (Rent percentage of published value)
         bought["PRM"]=bought["renta"]/bought["valor_publicado"]
+        
+        #Property rating calculation for future bought
+        properties["rent_vs_price"]=properties["PEA"]/properties["valor_publicado"]*100
+        properties["offered_vs_published"]=properties["POI"]/properties["valor_publicado"]
+        properties["net_rent"]=properties["PEA"]-properties["cuota"]
+        properties["property_rating"]=0
+
+        properties.update(properties[properties["rent_vs_price"]*100>1]["property_rating"]+5)
+        properties.update(properties[properties["offered_vs_published"]>0.7]["property_rating"]+3)
+        properties.update(properties[properties["net_rent"]>0]["property_rating"]+2)
 
                 
         return properties, bought

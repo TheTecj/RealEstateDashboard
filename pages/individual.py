@@ -51,32 +51,16 @@ selected=properties[properties["inmueble"]==selected]
 
 st.title("Métricas para inmuebles especificos")
 
-#Property quality rating
-property_rating=0
-
-rent_vs_price=selected["PEA"]/selected["valor_publicado"]*100
-offered_vs_published=selected["POI"]/selected["valor_publicado"]
-net_rent=selected["PEA"]-selected["cuota"]
-
-if rent_vs_price.iloc[0]*100>1:
-    property_rating+=5
-
-if offered_vs_published.iloc[0]>0.7:
-    property_rating+=3 
-
-if net_rent.iloc[0]>0:
-    property_rating+=2
-
-if property_rating>7:
+if selected["property_rating"].iloc[0]>7:
     score_color="green"
-elif property_rating>=5:
+elif selected["property_rating"].iloc[0]>=5:
     score_color="orange"
 else:
     score_color="red"
  
 score=f"""
 <p>Calificacion del inmueble:</p>
-<h1 style="color:{score_color}">{property_rating}</h1>
+<h1 style="color:{score_color}">{int(selected["property_rating"].iloc[0])}</h1>
 """
 st.markdown(score,unsafe_allow_html=True)
     
@@ -85,23 +69,23 @@ col1,col2=st.columns(2)
 with col1:
     #Metrics for opportunities (not bought)
     if selected["comprado"].iloc[0]==False:
-        st.metric(label="Porcentaje mensual estimado alquiler/Precio", value=selected["PEA"]/selected["valor_publicado"]*100)
+        st.metric(label="Porcentaje mensual estimado alquiler/Precio", value=round(selected["PEA"]/selected["valor_publicado"]*100,3))
         st.metric(label="Valor publicado",value=selected["valor_publicado"])
-        st.metric(label="Precio de oferta inicial",value=selected["POI"])
-        st.metric(label="Precio Maximo de negociacion",value=selected["PMN"])
+        st.metric(label="Precio de oferta inicial",value=int(selected["POI"]))
+        st.metric(label="Precio Maximo de negociacion",value=int(selected["PMN"]))
     #Metrics for owned properties
     else:
-        st.metric(label="Porcentaje mensual alquiler/Precio", value=selected["renta"]/selected["valor_compra"]*100)
-        st.metric(label="Valor recomendado arriendo",value=selected["PEA"]+selected["PEA"]*0.1)
+        st.metric(label="Porcentaje mensual alquiler/Precio", value=round(selected["renta"]/selected["valor_compra"]*100,3))
+        st.metric(label="Valor recomendado arriendo",value=int(selected["PEA"]+selected["PEA"]*0.1))
                 
 with col2:
     #Metrics for opportunities (not bought)
     if selected["comprado"].iloc[0]==False:
-        st.metric(label="Renta neta mensual estimada(Quitando gastos fijos)", value=selected["PEA"]-selected["cuota"])
+        st.metric(label="Renta neta mensual estimada(Quitando gastos fijos)", value=int(selected["PEA"]-selected["cuota"]))
     #Metrics for owned properties
     else:
         st.metric(label="Rentabilidad neta mensual(Quitando gastos fijos)", value=selected["renta"]-selected["cuota"])
-        st.metric(label="Valor del PAM vs propiedades cercanas", value=selected["PAM"]-selected["PPAM"])
+        st.metric(label="Valor del PAM vs propiedades cercanas", value=round(selected["PAM"]-selected["PPAM"],3))
 
 
 st.metric(label="Area", value=selected["area"])

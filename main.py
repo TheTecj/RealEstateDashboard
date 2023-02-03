@@ -10,21 +10,28 @@ properties,bought=Property(150).load_data()
 
 #Map images
 HOUSE="https://upload.wikimedia.org/wikipedia/commons/b/bc/House_image_icon.png"
-OPORTUNITY="https://upload.wikimedia.org/wikipedia/commons/8/8b/Light-bulb.png"
+OPORTUNITY="https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Bluedot.svg/1200px-Bluedot.svg.png"
+GOOD_OPPORTUNITY="https://upload.wikimedia.org/wikipedia/commons/8/8b/Light-bulb.png"
 
 #Map styles
 bought_icon_data={
       'url':HOUSE,
-      'width':20,
-      'height':20,
-      'anchorY':20
+      'width':50,
+      'height':50,
+      'anchorY':50
     }
     
 oportunity_icon_data={
     'url':OPORTUNITY,
-    'width':20,
-    'height':20,
-    'anchorY':20
+    'width':50,
+    'height':50,
+    'anchorY':50
+}
+good_oportunity_icon_data={
+    'url':GOOD_OPPORTUNITY,
+    'width':50,
+    'height':50,
+    'anchorY':50
 }
     
 properties["icon_data"]=None
@@ -41,11 +48,14 @@ else:
     else: 
         view = pdk.ViewState(longitude=max(properties['longitud']),
         latitude=max(properties['latitud']), zoom=4)
-    
-    
-    
+        
     for i in properties.index:
-        properties['icon_data'][i]=bought_icon_data if properties["comprado"][i]==True else oportunity_icon_data
+        if properties["comprado"][i]:
+            properties['icon_data'][i]=bought_icon_data
+        elif properties["property_rating"][i]>=7:
+            properties['icon_data'][i]=good_oportunity_icon_data
+        else:
+            properties['icon_data'][i]=oportunity_icon_data
         
     icon_layer=pdk.Layer(
         type="IconLayer",
@@ -56,14 +66,18 @@ else:
         get_position=["longitud","latitud"],
         pickable=True
     )
-    
-r=pdk.Deck(layers=[icon_layer])
+
+r=pdk.Deck(layers=[icon_layer],tooltip={"text":"""
+                                        Inmueble: {inmueble}
+                                        Valor renta: ${renta}
+                                        Calificacion para inversion: {property_rating}
+                                        """})
 st.pydeck_chart(r,use_container_width=True)
 
 #Total portfolio value (bought properties)
 st.header("Portafolio")
 st.metric(label="Capital invertido", value="$ "+str(int(properties["capital_invertido"].sum())))
-st.metric(label="Porcentaje alquiler/precio",value=round(bought["PRM"].mean(),3)*100)
+st.metric(label="Porcentaje alquiler/precio",value=round(bought["PRM"].mean()*100,3))
 col1,col2=st.columns(2)
 
 #EAR of bought properties
@@ -83,7 +97,7 @@ with col2:
     fig.update_layout({
     'plot_bgcolor':'rgb(0,0,0)'
 })
-    st.subheader("Rentabilidad de los properties")
+    st.subheader("Rentabilidad de los inmuebles")
     st.plotly_chart(fig,use_container_width=True)
 
 fig=px.line(bought[["fecha_compra","valor_portafolio"]],x="fecha_compra",y="valor_portafolio",markers=True)
