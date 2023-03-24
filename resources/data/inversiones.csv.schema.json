@@ -1,6 +1,11 @@
 {
   "fields": [
     {
+      "name": "fecha_registro",
+      "type": "date",
+      "format": "%d/%m/%Y"
+    },
+    {
       "name": "valor_publicado",
       "type": "integer",
       "format": "default"
@@ -32,8 +37,8 @@
     },
     {
       "name": "fecha_compra",
-      "type": "any",
-      "format": "default"
+      "type": "date",
+      "format": "%d/%m/%Y"
     },
     {
       "name": "cuota",

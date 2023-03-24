@@ -70,4 +70,5 @@ class Property:
 
                 
         return properties, bought
+
         
