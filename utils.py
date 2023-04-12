@@ -7,6 +7,19 @@ class Property:
         
     def load_data(self):
         properties=pd.read_csv("resources/data/inversiones.csv")
+        properties_db=pd.read_csv("resources/data/propiedades_final.csv")
+        
+        properties["url"]=""
+        properties=pd.concat([properties,properties_db])
+        properties.reset_index(inplace=True, drop=True) 
+        
+        properties["latitud"].replace("",0)
+        properties["longitud"].replace("",0)
+        
+        properties["latitud"].fillna(0,inplace=True)
+        properties["longitud"].fillna(0,inplace=True)
+        
+        properties["fecha_compra"]=pd.to_datetime(properties["fecha_compra"],format="%d/%m/%Y")
         
         #Getting basic metrics for all properties
         properties["rentabilidad"]=(properties["renta"])*12/properties["valor_publicado"]*100
@@ -67,8 +80,8 @@ class Property:
         properties.update(properties[properties["rent_vs_price"]*100>1]["property_rating"]+5)
         properties.update(properties[properties["offered_vs_published"]>0.7]["property_rating"]+3)
         properties.update(properties[properties["net_rent"]>0]["property_rating"]+2)
-
-                
+        
+        properties.fillna(0,inplace=True)
         return properties, bought
 
         

@@ -1,0 +1,72 @@
+{
+  "fields": [
+    {
+      "name": "area",
+      "type": "integer",
+      "format": "default"
+    },
+    {
+      "name": "inmueble",
+      "type": "string",
+      "format": "default"
+    },
+    {
+      "name": "latitud",
+      "type": "number",
+      "format": "default"
+    },
+    {
+      "name": "longitud",
+      "type": "number",
+      "format": "default"
+    },
+    {
+      "name": "url",
+      "type": "string",
+      "format": "uri"
+    },
+    {
+      "name": "valor_publicado",
+      "type": "integer",
+      "format": "default"
+    },
+    {
+      "name": "fecha_registro",
+      "type": "date",
+      "format": "%d/%m/%Y"
+    },
+    {
+      "name": "comprado",
+      "type": "boolean",
+      "format": "default"
+    },
+    {
+      "name": "valor_compra",
+      "type": "integer",
+      "format": "default"
+    },
+    {
+      "name": "financiado",
+      "type": "integer",
+      "format": "default"
+    },
+    {
+      "name": "renta",
+      "type": "integer",
+      "format": "default"
+    },
+    {
+      "name": "fecha_compra",
+      "type": "date",
+      "format": "%d/%m/%Y"
+    },
+    {
+      "name": "cuota",
+      "type": "integer",
+      "format": "default"
+    }
+  ],
+  "missingValues": [
+    ""
+  ]
+}

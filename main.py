@@ -6,7 +6,7 @@ from importlib import reload
 import pydeck as pdk
 from utils import Property
 
-properties,bought=Property(150).load_data()
+properties,bought=Property(20).load_data()
 
 #Map images
 HOUSE="https://upload.wikimedia.org/wikipedia/commons/b/bc/House_image_icon.png"
@@ -48,7 +48,8 @@ else:
     else: 
         view = pdk.ViewState(longitude=max(properties['longitud']),
         latitude=max(properties['latitud']), zoom=4)
-        
+    
+    
     for i in properties.index:
         if properties["comprado"][i]:
             properties['icon_data'][i]=bought_icon_data
